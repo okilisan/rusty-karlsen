@@ -370,6 +370,42 @@ impl RpcApi for RpcCoreMock {
         Err(RpcError::NotImplemented)
     }
 
+    // SubmitPouwTask
+    async fn submit_pouw_task_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        _request: SubmitPouwTaskRequest,
+    ) -> RpcResult<SubmitPouwTaskResponse> {
+        Err(RpcError::NotImplemented)
+    }
+
+    // GetPouwTask
+    async fn get_pouw_task_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        _request: GetPouwTaskRequest,
+    ) -> RpcResult<GetPouwTaskResponse> {
+        Err(RpcError::NotImplemented)
+    }
+
+    // SubmitPouwResult
+    async fn submit_pouw_result_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        _request: SubmitPouwResultRequest,
+    ) -> RpcResult<SubmitPouwResultResponse> {
+        Err(RpcError::NotImplemented)
+    }
+
+    // GetPouwResult
+    async fn get_pouw_result_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        _request: GetPouwResultRequest,
+    ) -> RpcResult<GetPouwResultResponse> {
+        Err(RpcError::NotImplemented)
+    }
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Notification API
 

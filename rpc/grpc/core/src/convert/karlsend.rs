@@ -74,6 +74,11 @@ pub mod karlsend_request_convert {
     impl_into_karlsend_request!(NotifyVirtualChainChanged);
     impl_into_karlsend_request!(NotifySinkBlueScoreChanged);
 
+    impl_into_karlsend_request!(SubmitPouwTask);
+    impl_into_karlsend_request!(GetPouwTask);
+    impl_into_karlsend_request!(SubmitPouwResult);
+    impl_into_karlsend_request!(GetPouwResult);
+
     macro_rules! impl_into_karlsend_request {
         ($name:tt) => {
             paste::paste! {
@@ -202,6 +207,11 @@ pub mod karlsend_response_convert {
     impl_into_karlsend_response!(GetFeeEstimateExperimental);
     impl_into_karlsend_response!(GetCurrentBlockColor);
     impl_into_karlsend_response!(GetUtxoReturnAddress);
+
+    impl_into_karlsend_response!(SubmitPouwTask);
+    impl_into_karlsend_response!(GetPouwTask);
+    impl_into_karlsend_response!(SubmitPouwResult);
+    impl_into_karlsend_response!(GetPouwResult);
 
     impl_into_karlsend_notify_response!(NotifyBlockAdded);
     impl_into_karlsend_notify_response!(NotifyNewBlockTemplate);

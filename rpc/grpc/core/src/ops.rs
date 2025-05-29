@@ -103,6 +103,12 @@ pub enum KarlsendPayloadOps {
     StopNotifyingUtxosChanged,
     StopNotifyingPruningPointUtxoSetOverride,
 
+   // Pouw RPC methods:
+    SubmitPouwTask,
+    GetPouwTask,
+    SubmitPouwResult,
+    GetPouwResult,
+
     // Please note:
     // Notification payloads existing in ResponsePayload are not considered valid ops.
     // The conversion from a notification ResponsePayload into KarlsendPayloadOps fails.

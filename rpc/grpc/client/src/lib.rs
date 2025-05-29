@@ -278,6 +278,11 @@ impl RpcApi for GrpcClient {
     route!(get_current_block_color_call, GetCurrentBlockColor);
     route!(get_utxo_return_address_call, GetUtxoReturnAddress);
 
+    route!(submit_pouw_task_call, SubmitPouwTask);
+    route!(get_pouw_task_call, GetPouwTask);
+    route!(submit_pouw_result_call, SubmitPouwResult);
+    route!(get_pouw_result_call, GetPouwResult);
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Notification API
 

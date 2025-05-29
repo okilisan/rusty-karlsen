@@ -562,6 +562,47 @@ from!(item: &karlsen_rpc_core::NotifySinkBlueScoreChangedRequest, protowire::Not
 });
 from!(RpcResult<&karlsen_rpc_core::NotifySinkBlueScoreChangedResponse>, protowire::NotifySinkBlueScoreChangedResponseMessage);
 
+from!(item: &karlsen_rpc_core::SubmitPouwTaskRequest, protowire::SubmitPouwTaskRequestMessage, {
+    Self { subnet: item.subnet.clone(), data: item.data.clone() }
+});
+from!(item: RpcResult<&karlsen_rpc_core::SubmitPouwTaskResponse>, protowire::SubmitPouwTaskResponseMessage, {
+    Self { task_id: item.task_id.clone(), error: None }
+});
+
+from!(item: &karlsen_rpc_core::GetPouwTaskRequest, protowire::GetPouwTaskRequestMessage, {
+    Self { subnet: item.subnet.clone() }
+});
+from!(item: RpcResult<&karlsen_rpc_core::GetPouwTaskResponse>, protowire::GetPouwTaskResponseMessage, {
+    Self {
+        task_id: item.task_id.clone(),
+        subnet: item.subnet.clone(),
+        data: item.data.clone(),
+        error: None
+    }
+});
+
+from!(item: &karlsen_rpc_core::SubmitPouwResultRequest, protowire::SubmitPouwResultRequestMessage, {
+    Self { task_id: item.task_id.clone(), data: item.data.clone() }
+});
+from!(item: RpcResult<&karlsen_rpc_core::SubmitPouwResultResponse>, protowire::SubmitPouwResultResponseMessage, {
+    Self {
+        accepted: item.accepted,
+        error: None
+    }
+});
+
+from!(item: &karlsen_rpc_core::GetPouwResultRequest, protowire::GetPouwResultRequestMessage, {
+    Self { task_id: item.task_id.clone() }
+});
+from!(item: RpcResult<&karlsen_rpc_core::GetPouwResultResponse>, protowire::GetPouwResultResponseMessage, {
+    Self {
+        data: item.data.clone(),
+        found: item.found.clone(),
+        //result: item.result.clone(),
+        error: None
+    }
+});
+
 // ----------------------------------------------------------------------------
 // protowire to rpc_core
 // ----------------------------------------------------------------------------
@@ -1062,6 +1103,79 @@ try_from!(item: &protowire::NotifySinkBlueScoreChangedRequestMessage, karlsen_rp
     Self { command: item.command.into() }
 });
 try_from!(&protowire::NotifySinkBlueScoreChangedResponseMessage, RpcResult<karlsen_rpc_core::NotifySinkBlueScoreChangedResponse>);
+
+// Pouw gRPC <-> Core conversion using try_from! macros
+
+// Converts protowire SubmitPouwTaskRequestMessage to core SubmitPouwTaskRequest
+try_from!(item: &protowire::SubmitPouwTaskRequestMessage, karlsen_rpc_core::SubmitPouwTaskRequest, {
+    Self {
+        subnet: item.subnet.clone(),
+        data: item.data.clone(),
+    }
+});
+
+// Converts protowire SubmitPouwTaskResponseMessage to core SubmitPouwTaskResponse
+try_from!(item: &protowire::SubmitPouwTaskResponseMessage, RpcResult<karlsen_rpc_core::SubmitPouwTaskResponse>, {
+    Self {
+        task_id: item.task_id.clone(),
+    }
+});
+
+// Converts protowire GetPouwTaskRequestMessage to core GetPouwTaskRequest
+try_from!(item: &protowire::GetPouwTaskRequestMessage, karlsen_rpc_core::GetPouwTaskRequest, {
+    Self {
+        subnet: item.subnet.clone(),
+    }
+});
+
+// Converts protowire GetPouwTaskResponseMessage to core GetPouwTaskResponse
+try_from!(item: &protowire::GetPouwTaskResponseMessage, RpcResult<karlsen_rpc_core::GetPouwTaskResponse>, {
+    Self {
+        task_id: item.task_id.clone(),
+        subnet: item.subnet.clone(),
+        data: item.data.clone(),
+        /*
+        id: item.id.clone(),
+        data: item.data.clone(),
+        found: item.found,
+        */
+    }
+});
+
+// Converts protowire SubmitPouwResultRequestMessage to core SubmitPouwResultRequest
+try_from!(item: &protowire::SubmitPouwResultRequestMessage, karlsen_rpc_core::SubmitPouwResultRequest, {
+    Self {
+        task_id: item.task_id.clone(),
+        data: item.data.clone(),
+        /*
+        id: item.id.clone(),
+        result: item.result.clone(),
+        */
+    }
+});
+
+// Converts protowire SubmitPouwResultResponseMessage to core SubmitPouwResultResponse
+try_from!(item: &protowire::SubmitPouwResultResponseMessage, RpcResult<karlsen_rpc_core::SubmitPouwResultResponse>, {
+    Self {
+        accepted: item.accepted,
+    }
+});
+
+// Converts protowire GetPouwResultRequestMessage to core GetPouwResultRequest
+try_from!(item: &protowire::GetPouwResultRequestMessage, karlsen_rpc_core::GetPouwResultRequest, {
+    Self {
+        task_id: item.task_id.clone(),
+    }
+});
+
+// Converts protowire GetPouwResultResponseMessage to core GetPouwResultResponse
+try_from!(item: &protowire::GetPouwResultResponseMessage, RpcResult<karlsen_rpc_core::GetPouwResultResponse>, {
+    Self {
+        data: item.data.clone(),
+        found: item.found,
+        //result: if item.has_result { Some(item.result.clone()) } else { None },
+    }
+});
 
 // ----------------------------------------------------------------------------
 // Unit tests

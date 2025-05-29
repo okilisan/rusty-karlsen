@@ -984,3 +984,48 @@ message GetUtxoReturnAddressResponseMessage {
   string return_address = 1;
   RPCError error = 1000;
 }
+
+// Submit a new Pouw task for a subnet.
+message SubmitPouwTaskRequestMessage {
+  string subnet = 1;
+  string data = 2;
+}
+
+message SubmitPouwTaskResponseMessage {
+  string task_id = 1;
+  RPCError error = 1000;
+}
+
+// Miner requests the next available Pouw task for a subnet.
+message GetPouwTaskRequestMessage {
+  string subnet = 1;
+}
+
+message GetPouwTaskResponseMessage {
+  string task_id = 1;
+  string subnet = 2;
+  string data = 3;
+  RPCError error = 1000;
+}
+
+// Miner submits the result of a Pouw task.
+message SubmitPouwResultRequestMessage {
+  string task_id = 1;
+  string data = 2;
+}
+
+message SubmitPouwResultResponseMessage {
+  bool accepted = 1;
+  RPCError error = 1000;
+}
+
+// Client requests the result of a previously submitted task.
+message GetPouwResultRequestMessage {
+  string task_id = 1;
+}
+
+message GetPouwResultResponseMessage {
+  string data = 1;
+  bool found = 2;
+  RPCError error = 1000;
+}

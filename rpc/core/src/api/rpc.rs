@@ -506,6 +506,57 @@ pub trait RpcApi: Sync + Send + AnySync {
             Command::Stop => self.stop_notify(id, scope).await,
         }
     }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Proof of Useful Work (Pouw) RPC API
+
+    /// Submits a new Pouw task to the node (to be distributed to miners).
+    async fn submit_pouw_task(&self, subnet: String, data: String) -> RpcResult<SubmitPouwTaskResponse> {
+        self.submit_pouw_task_call(None, SubmitPouwTaskRequest { subnet, data }).await
+    }
+
+    /// Core handler for submitting a Pouw task (used internally by the API).
+    async fn submit_pouw_task_call(
+        &self,
+        connection: Option<&DynRpcConnection>,
+        request: SubmitPouwTaskRequest,
+    ) -> RpcResult<SubmitPouwTaskResponse>;
+
+    /// Retrieves a pending Pouw task for a given subnet (called by miners).
+    async fn get_pouw_task(&self, subnet: String) -> RpcResult<GetPouwTaskResponse> {
+        self.get_pouw_task_call(None, GetPouwTaskRequest { subnet }).await
+    }
+
+    /// Core handler for retrieving a Pouw task.
+    async fn get_pouw_task_call(
+        &self,
+        connection: Option<&DynRpcConnection>,
+        request: GetPouwTaskRequest,
+    ) -> RpcResult<GetPouwTaskResponse>;
+
+    /// Submits a result for a previously assigned Pouw task (called by miners).
+    async fn submit_pouw_result(&self, task_id: String, data: String) -> RpcResult<SubmitPouwResultResponse> {
+        self.submit_pouw_result_call(None, SubmitPouwResultRequest { task_id, data }).await
+    }
+
+    /// Core handler for submitting a Pouw task result.
+    async fn submit_pouw_result_call(
+        &self,
+        connection: Option<&DynRpcConnection>,
+        request: SubmitPouwResultRequest,
+    ) -> RpcResult<SubmitPouwResultResponse>;
+
+    /// Retrieves the result of a given Pouw task (called by the original client who submitted the task).
+    async fn get_pouw_result(&self, task_id: String) -> RpcResult<GetPouwResultResponse> {
+        self.get_pouw_result_call(None, GetPouwResultRequest { task_id }).await
+    }
+
+    /// Core handler for retrieving a Pouw task result.
+    async fn get_pouw_result_call(
+        &self,
+        connection: Option<&DynRpcConnection>,
+        request: GetPouwResultRequest,
+    ) -> RpcResult<GetPouwResultResponse>;
 }
 
 pub type DynRpcService = Arc<dyn RpcApi>;

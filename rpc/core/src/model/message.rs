@@ -3511,3 +3511,224 @@ impl Deserializer for UnsubscribeResponse {
         Ok(Self {})
     }
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SubmitPouwTaskRequest {
+    pub subnet: String,
+    pub data: String,
+}
+
+impl Serializer for SubmitPouwTaskRequest {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.subnet, writer)?;
+        store!(String, &self.data, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for SubmitPouwTaskRequest {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let subnet = load!(String, reader)?;
+        let data = load!(String, reader)?;
+        Ok(Self { subnet, data })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SubmitPouwTaskResponse {
+    pub task_id: String,
+}
+
+impl Serializer for SubmitPouwTaskResponse {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.task_id, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for SubmitPouwTaskResponse {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let task_id = load!(String, reader)?;
+        Ok(Self { task_id })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetPouwTaskRequest {
+    pub subnet: String,
+}
+
+impl Serializer for GetPouwTaskRequest {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.subnet, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for GetPouwTaskRequest {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let subnet = load!(String, reader)?;
+        Ok(Self { subnet })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetPouwTaskResponse {
+    pub task_id: String,
+    pub subnet: String,
+    pub data: String,
+    /*
+    pub id: String,
+    pub data: String,
+    pub found: bool,
+    */
+}
+
+impl Serializer for GetPouwTaskResponse {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.task_id, writer)?;
+        store!(String, &self.subnet, writer)?;
+        store!(String, &self.data, writer)?;
+        /*
+        store!(String, &self.id, writer)?;
+        store!(String, &self.data, writer)?;
+        store!(bool, &self.found, writer)?;
+        */
+        Ok(())
+    }
+}
+
+impl Deserializer for GetPouwTaskResponse {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let task_id = load!(String, reader)?;
+        let subnet = load!(String, reader)?;
+        let data = load!(String, reader)?;
+        /*
+        let id = load!(String, reader)?;
+        let data = load!(String, reader)?;
+        let found = load!(bool, reader)?;
+        */
+        Ok(Self { task_id, subnet, data })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SubmitPouwResultRequest {
+    pub task_id: String,
+    pub data: String,
+    /*
+    pub id: String,
+    pub result: String,
+    */
+}
+
+impl Serializer for SubmitPouwResultRequest {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.task_id, writer)?;
+        store!(String, &self.data, writer)?;
+        /*
+        store!(String, &self.id, writer)?;
+        store!(String, &self.result, writer)?;
+        */
+        Ok(())
+    }
+}
+
+impl Deserializer for SubmitPouwResultRequest {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let task_id = load!(String, reader)?;
+        let data = load!(String, reader)?;
+        /*
+        let id = load!(String, reader)?;
+        let result = load!(String, reader)?;
+        */
+        Ok(Self { task_id, data })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SubmitPouwResultResponse {
+    pub accepted: bool,
+}
+
+impl Serializer for SubmitPouwResultResponse {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(bool, &self.accepted, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for SubmitPouwResultResponse {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let accepted = load!(bool, reader)?;
+        Ok(Self { accepted })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetPouwResultRequest {
+    pub task_id: String,
+}
+
+impl Serializer for GetPouwResultRequest {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.task_id, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for GetPouwResultRequest {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let task_id = load!(String, reader)?;
+        Ok(Self { task_id })
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetPouwResultResponse {
+    pub data: String,
+    pub found: bool,
+    //pub result: Option<String>,
+}
+
+impl Serializer for GetPouwResultResponse {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(String, &self.data, writer)?;
+        store!(bool, &self.found, writer)?;
+        //store!(Option<String>, &self.result, writer)?;
+        Ok(())
+    }
+}
+
+impl Deserializer for GetPouwResultResponse {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let data = load!(String, reader)?;
+        let found = load!(bool, reader)?;
+        //let result = load!(Option<String>, reader)?;
+        Ok(Self { data, found })
+    }
+}

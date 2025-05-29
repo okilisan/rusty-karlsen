@@ -138,6 +138,15 @@ pub enum RpcApiOps {
     GetCurrentBlockColor = 149,
     /// Get UTXO Return Addresses
     GetUtxoReturnAddress = 150,
+
+    /// Submit a Pouw task to the node
+    SubmitPouwTask = 160,
+    /// Get a pending Pouw task for a miner
+    GetPouwTask = 161,
+    /// Submit a computed Pouw result
+    SubmitPouwResult = 162,
+    /// Retrieve the result of a completed Pouw task
+    GetPouwResult = 163,
 }
 
 impl RpcApiOps {

@@ -652,6 +652,10 @@ impl RpcApi for KarlsenRpcClient {
             SubmitTransaction,
             SubmitTransactionReplacement,
             Unban,
+            SubmitPouwTask,
+            GetPouwTask,
+            SubmitPouwResult,
+            GetPouwResult,
         ]
     );
 

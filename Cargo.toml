@@ -43,6 +43,7 @@ members = [
     "rpc/wrpc/examples/subscriber",
     "rpc/wrpc/examples/simple_client",
     "mining",
+    "pouw",
     "mining/errors",
     "protocol/p2p",
     "protocol/flows",
@@ -105,6 +106,7 @@ karlsen-math = { version = "3.0.0", path = "math" }
 karlsen-merkle = { version = "3.0.0", path = "crypto/merkle" }
 karlsen-metrics-core = { version = "3.0.0", path = "metrics/core" }
 karlsen-mining = { version = "3.0.0", path = "mining" }
+karlsen-pouw = { version = "3.0.0", path = "pouw" }
 karlsen-mining-errors = { version = "3.0.0", path = "mining/errors" }
 karlsen-muhash = { version = "3.0.0", path = "crypto/muhash" }
 karlsen-notify = { version = "3.0.0", path = "notify" }

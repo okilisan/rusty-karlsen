@@ -56,6 +56,7 @@ use karlsen_p2p_flows::flow_context::FlowContext;
 use karlsen_p2p_lib::common::ProtocolError;
 use karlsen_p2p_mining::rule_engine::MiningRuleEngine;
 use karlsen_perf_monitor::{counters::CountersSnapshot, Monitor as PerfMonitor};
+use karlsen_pouw::manager::PouwManagerProxy;
 use karlsen_rpc_core::{
     api::{
         connection::DynRpcConnection,
@@ -122,6 +123,7 @@ pub struct RpcCoreService {
     fee_estimate_cache: ExpiringCache<RpcFeeEstimate>,
     fee_estimate_verbose_cache: ExpiringCache<karlsen_mining::errors::MiningManagerResult<GetFeeEstimateExperimentalResponse>>,
     mining_rule_engine: Arc<MiningRuleEngine>,
+    pouw_manager: PouwManagerProxy,
 }
 
 const RPC_CORE: &str = "rpc-core";
@@ -148,6 +150,7 @@ impl RpcCoreService {
         grpc_tower_counters: Arc<TowerConnectionCounters>,
         system_info: SystemInfo,
         mining_rule_engine: Arc<MiningRuleEngine>,
+        pouw_manager: PouwManagerProxy,
     ) -> Self {
         // This notifier UTXOs subscription granularity to index-processor or consensus notifier
         let policies = match index_notifier {
@@ -227,6 +230,7 @@ impl RpcCoreService {
             fee_estimate_cache: ExpiringCache::new(Duration::from_millis(500), Duration::from_millis(1000)),
             fee_estimate_verbose_cache: ExpiringCache::new(Duration::from_millis(500), Duration::from_millis(1000)),
             mining_rule_engine,
+            pouw_manager,
         }
     }
 
@@ -1268,6 +1272,65 @@ impl RpcApi for RpcCoreService {
     async fn stop_notify(&self, id: ListenerId, scope: Scope) -> RpcResult<()> {
         self.notifier.clone().stop_notify(id, scope).await?;
         Ok(())
+    }
+
+    /// Handles a client request to submit a new Pouw task.
+    /// The task includes a subnet identifier and a data payload.
+    /// Returns a generated task ID that can later be used to retrieve results.
+    async fn submit_pouw_task_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        request: SubmitPouwTaskRequest,
+    ) -> RpcResult<SubmitPouwTaskResponse> {
+        let manager = self.pouw_manager.clone();
+        let task_id = manager.submit_task(request.subnet, request.data).await;
+        //let block_template = self.mining_manager.clone().get_block_template(&session, miner_data).await?;
+        Ok(SubmitPouwTaskResponse { task_id })
+    }
+
+    /// Called by a miner to fetch the next available Pouw task for a specific subnet.
+    /// Returns task ID and payload if found, or a 'found = false' flag otherwise.
+    async fn get_pouw_task_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        request: GetPouwTaskRequest,
+    ) -> RpcResult<GetPouwTaskResponse> {
+        let manager = self.pouw_manager.clone();
+        if let Some(ref pow_task) = manager.get_task(request.subnet).await {
+            let task_id = pow_task.id.clone();
+            let subnet = pow_task.subnet.clone();
+            let data = pow_task.encrypted_response.clone().unwrap_or_default();
+            Ok(GetPouwTaskResponse { task_id, subnet, data })
+        } else {
+            Ok(GetPouwTaskResponse { task_id: "".to_string(), subnet: "".to_string(), data: "".to_string() })
+        }
+    }
+
+    /// Called by a miner to submit a completed result for a specific task.
+    /// Returns whether the result was accepted (valid and not already submitted).
+    async fn submit_pouw_result_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        request: SubmitPouwResultRequest,
+    ) -> RpcResult<SubmitPouwResultResponse> {
+        let manager = self.pouw_manager.clone();
+        let accepted = manager.submit_result(request.task_id, request.data).await;
+        Ok(SubmitPouwResultResponse { accepted })
+    }
+
+    /// Called by a client to check if a result is available for a previously submitted task.
+    /// Returns the result if available, or `None` if still pending or unknown.
+    async fn get_pouw_result_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        request: GetPouwResultRequest,
+    ) -> RpcResult<GetPouwResultResponse> {
+        let manager = self.pouw_manager.clone();
+        if let Some(data) = manager.get_result(request.task_id).await {
+            Ok(GetPouwResultResponse { data, found: true })
+        } else {
+            Ok(GetPouwResultResponse { data: "".to_string(), found: false })
+        }
     }
 }
 

@@ -39,6 +39,7 @@ use karlsen_mining::{
     MiningCounters,
 };
 use karlsen_p2p_flows::{flow_context::FlowContext, service::P2pService};
+use karlsen_pouw::manager::{PouwManager, PouwManagerProxy};
 
 use itertools::Itertools;
 use karlsen_perf_monitor::{builder::Builder as PerfMonitorBuilder, counters::CountersSnapshot};
@@ -575,6 +576,8 @@ do you confirm? (answer y/n or pass --yes to the Karlsend command line to confir
         tick_service.clone(),
     ));
 
+    let pouw_manager = PouwManagerProxy::new(Arc::new(PouwManager::new()));
+
     let hub = Hub::new();
     let mining_rule_engine = Arc::new(MiningRuleEngine::new(
         consensus_manager.clone(),
@@ -624,6 +627,7 @@ do you confirm? (answer y/n or pass --yes to the Karlsend command line to confir
         grpc_tower_counters.clone(),
         system_info,
         mining_rule_engine.clone(),
+        pouw_manager,
     ));
     let grpc_service_broadcasters: usize = 3; // TODO: add a command line argument or derive from other arg/config/host-related fields
     let grpc_service = if !args.disable_grpc {

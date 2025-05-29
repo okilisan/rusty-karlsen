@@ -66,6 +66,12 @@ message KarlsendRequest {
     GetFeeEstimateExperimentalRequestMessage getFeeEstimateExperimentalRequest = 1108;
     GetCurrentBlockColorRequestMessage getCurrentBlockColorRequest = 1110;
     GetUtxoReturnAddressRequestMessage GetUtxoReturnAddressRequest = 1112;
+
+    SubmitPouwTaskRequestMessage submitPouwTaskRequest = 1200;
+    GetPouwTaskRequestMessage getPouwTaskRequest = 1202;
+    SubmitPouwResultRequestMessage submitPouwResultRequest = 1204;
+    GetPouwResultRequestMessage getPouwResultRequest = 1206;
+
   }
 }
 
@@ -132,6 +138,12 @@ message KarlsendResponse {
     GetFeeEstimateExperimentalResponseMessage getFeeEstimateExperimentalResponse = 1109;
     GetCurrentBlockColorResponseMessage getCurrentBlockColorResponse = 1111;
     GetUtxoReturnAddressResponseMessage GetUtxoReturnAddressResponse = 1113;
+
+    SubmitPouwTaskResponseMessage submitPouwTaskResponse = 1201;
+    GetPouwTaskResponseMessage getPouwTaskResponse = 1203;
+    SubmitPouwResultResponseMessage submitPouwResultResponse = 1205;
+    GetPouwResultResponseMessage getPouwResultResponse = 1207;
+
   }
 }
 

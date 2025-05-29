@@ -92,6 +92,10 @@ impl Factory {
                 NotifyVirtualChainChanged,
                 StopNotifyingUtxosChanged,
                 StopNotifyingPruningPointUtxoSetOverride,
+                SubmitPouwTask,
+                GetPouwTask,
+                SubmitPouwResult,
+                GetPouwResult,
             ]
         );
 

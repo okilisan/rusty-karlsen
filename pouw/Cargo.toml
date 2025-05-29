@@ -1,0 +1,16 @@
+[package]
+name = "karlsen-pouw"
+description = "Karlsen proof of useful work"
+rust-version.workspace = true
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+include.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+karlsen-core.workspace = true
+log.workspace = true
+tokio = { workspace = true, features = ["sync"] }
+uuid = { workspace = true, features = ["v4", "fast-rng"] }
