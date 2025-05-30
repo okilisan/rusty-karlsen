@@ -1055,5 +1055,18 @@ build_wrpc_wasm_bindgen_interface!(
         /// to the Karlsen node again.
         /// Returned information: None.
         Unban,
+        
+        /// Submits a Proof-of-Useful-Work task.
+        /// Returned information: Task ID.
+        SubmitPouwTask,
+        /// Retrieves a Proof-of-Useful-Work task assigned to a subnet.
+        /// Returned information: Task ID and data.
+        GetPouwTask,
+        /// Submits the result of a PoUW task.
+        /// Returned information: Whether the result was accepted.
+        SubmitPouwResult,
+        /// Retrieves the result of a submitted PoUW task.
+        /// Returned information: Result data and found status.
+        GetPouwResult,
     ]
 );

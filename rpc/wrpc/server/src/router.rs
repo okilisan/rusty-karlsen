@@ -75,6 +75,10 @@ impl Router {
                 SubmitTransaction,
                 SubmitTransactionReplacement,
                 Unban,
+                SubmitPouwTask,
+                GetPouwTask,
+                SubmitPouwResult,
+                GetPouwResult,
             ]
         );
 

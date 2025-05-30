@@ -284,6 +284,46 @@ impl Rpc {
 
                 self.println(&ctx, result);
             }
+
+            RpcApiOps::SubmitPouwTask => {
+                if argv.len() < 2 {
+                    return Err(Error::custom("Usage: rpc submit-pouw-task <subnet> <data>"));
+                }
+                let subnet = argv.remove(0);
+                let data = argv.remove(0);
+                let result = rpc.submit_pouw_task_call(None, SubmitPouwTaskRequest { subnet, data }).await?;
+                self.println(&ctx, result);
+            }
+
+            RpcApiOps::GetPouwTask => {
+                if argv.is_empty() {
+                    return Err(Error::custom("Usage: rpc get-pouw-task <subnet>"));
+                }
+                let subnet = argv.remove(0);
+                let result = rpc.get_pouw_task_call(None, GetPouwTaskRequest { subnet }).await?;
+                self.println(&ctx, result);
+            }
+
+            RpcApiOps::SubmitPouwResult => {
+                if argv.len() < 2 {
+                    return Err(Error::custom("Usage: rpc submit-pouw-result <task_id> <data>"));
+                }
+                let task_id = argv.remove(0);
+                let data = argv.remove(0);
+                let result = rpc.submit_pouw_result_call(None, SubmitPouwResultRequest { task_id, data }).await?;
+                self.println(&ctx, result);
+            }
+
+            RpcApiOps::GetPouwResult => {
+                if argv.is_empty() {
+                    return Err(Error::custom("Usage: rpc get-pouw-result <task_id>"));
+                }
+                let task_id = argv.remove(0);
+                let result = rpc.get_pouw_result_call(None, GetPouwResultRequest { task_id }).await?;
+                self.println(&ctx, result);
+            }
+
+
             _ => {
                 tprintln!(ctx, "rpc method exists but is not supported by the cli: '{op_str}'\r\n");
                 return Ok(());

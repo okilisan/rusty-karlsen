@@ -1728,3 +1728,134 @@ try_from!( args: GetFeeEstimateExperimentalResponse, IGetFeeEstimateExperimental
 });
 
 // ---
+
+declare! {
+    ISubmitPouwTaskRequest,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface ISubmitPouwTaskRequest {
+        subnet : string;
+        data : string;
+    }
+    "#,
+}
+
+try_from!( args: ISubmitPouwTaskRequest, SubmitPouwTaskRequest, {
+    Ok(from_value(args.into())?)
+});
+
+declare! {
+    ISubmitPouwTaskResponse,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface ISubmitPouwTaskResponse {
+        task_id : string;
+    }
+    "#,
+}
+
+try_from!( args: SubmitPouwTaskResponse, ISubmitPouwTaskResponse, {
+    Ok(to_value(&args)?.into())
+});
+
+declare! {
+    IGetPouwTaskRequest,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface IGetPouwTaskRequest {
+        subnet : string;
+    }
+    "#,
+}
+
+try_from!( args: IGetPouwTaskRequest, GetPouwTaskRequest, {
+    Ok(from_value(args.into())?)
+});
+
+declare! {
+    IGetPouwTaskResponse,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface IGetPouwTaskResponse {
+        id : string;
+        data : string;
+        found : boolean;
+    }
+    "#,
+}
+
+try_from!( args: GetPouwTaskResponse, IGetPouwTaskResponse, {
+    Ok(to_value(&args)?.into())
+});
+
+declare! {
+    ISubmitPouwResultRequest,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface ISubmitPouwResultRequest {
+        task_id : string;
+        result : string;
+    }
+    "#,
+}
+
+try_from!( args: ISubmitPouwResultRequest, SubmitPouwResultRequest, {
+    Ok(from_value(args.into())?)
+});
+
+declare! {
+    ISubmitPouwResultResponse,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface ISubmitPouwResultResponse { }
+    "#,
+}
+
+try_from!( args: SubmitPouwResultResponse, ISubmitPouwResultResponse, {
+    Ok(to_value(&args)?.into())
+});
+
+declare! {
+    IGetPouwResultRequest,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface IGetPouwResultRequest {
+        task_id : string;
+    }
+    "#,
+}
+
+try_from!( args: IGetPouwResultRequest, GetPouwResultRequest, {
+    Ok(from_value(args.into())?)
+});
+
+declare! {
+    IGetPouwResultResponse,
+    r#"
+    /**
+     * @category Node RPC
+     */
+    export interface IGetPouwResultResponse {
+        result : string;
+        found : boolean;
+    }
+    "#,
+}
+
+try_from!( args: GetPouwResultResponse, IGetPouwResultResponse, {
+    Ok(to_value(&args)?.into())
+});
