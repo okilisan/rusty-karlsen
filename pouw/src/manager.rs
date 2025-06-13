@@ -26,7 +26,7 @@ pub struct PouwManager {
 impl PouwManager {
     /// Creates a new Pouw manager instance.
     pub fn new() -> Self {
-        info!("[PoUW] Task manager Started succefully");
+        info!("[PoUW] Task manager Started succesfully");
         Self { inner: Arc::new(Mutex::new(HashMap::new())) }
     }
 
@@ -39,6 +39,7 @@ impl PouwManager {
     /// # Returns
     /// A unique task ID.
     pub async fn submit_task(&self, subnet: String, encrypted_request: String) -> String {
+        info!("[PoUW] Submit Task subnet={} data={}", subnet, encrypted_request);
         let id = Uuid::new_v4().to_string();
         let task = PouwTask { id: id.clone(), subnet, encrypted_request, encrypted_response: None };
         self.inner.lock().await.insert(id.clone(), task);
@@ -53,7 +54,15 @@ impl PouwManager {
     /// # Returns
     /// An optional task ready to be processed by a miner.
     pub async fn get_task(&self, subnet: String) -> Option<PouwTask> {
-        self.inner.lock().await.values().find(|t| t.subnet == subnet && t.encrypted_response.is_none()).cloned()
+        let guard = self.inner.lock().await;
+        info!("[PoUW] Get Task for {} — Current task list:", subnet);
+        for task in guard.values() {
+            info!("→ Task id={}, subnet={}, encrypted_request={:?}, encrypted_response={:?}", task.id, task.subnet, task.encrypted_request, task.encrypted_response);
+        }
+
+        guard.values()
+            .find(|t| t.subnet == subnet && t.encrypted_response.is_none())
+            .cloned()
     }
 
     /// Submits the result of a task by a miner.
@@ -65,6 +74,7 @@ impl PouwManager {
     /// # Returns
     /// `true` if the result was accepted, `false` otherwise.
     pub async fn submit_result(&self, id: String, encrypted_response: String) -> bool {
+        info!("[PoUW] Submit Result");
         let mut tasks = self.inner.lock().await;
         if let Some(task) = tasks.get_mut(&id) {
             if task.encrypted_response.is_none() {
@@ -83,6 +93,7 @@ impl PouwManager {
     /// # Returns
     /// An optional result payload.
     pub async fn get_result(&self, id: String) -> Option<String> {
+        info!("[PoUW] Get Result");
         self.inner.lock().await.get(&id).and_then(|t| t.encrypted_response.clone())
     }
 }

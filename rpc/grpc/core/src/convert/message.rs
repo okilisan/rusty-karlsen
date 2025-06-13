@@ -572,12 +572,27 @@ from!(item: RpcResult<&karlsen_rpc_core::SubmitPouwTaskResponse>, protowire::Sub
 from!(item: &karlsen_rpc_core::GetPouwTaskRequest, protowire::GetPouwTaskRequestMessage, {
     Self { subnet: item.subnet.clone() }
 });
+/*
 from!(item: RpcResult<&karlsen_rpc_core::GetPouwTaskResponse>, protowire::GetPouwTaskResponseMessage, {
     Self {
         task_id: item.task_id.clone(),
         subnet: item.subnet.clone(),
         data: item.data.clone(),
         error: None
+    }
+});
+*/
+from!(item: RpcResult<&karlsen_rpc_core::GetPouwTaskResponse>, protowire::GetPouwTaskResponseMessage, {
+    let tasks = item.tasks.iter().map(|t| {
+        protowire::RpcPouwTask {
+            id: t.id.clone(),
+            data: t.data.clone(),
+        }
+    }).collect();
+
+    Self {
+        tasks,
+        error: None,
     }
 });
 
@@ -1129,16 +1144,24 @@ try_from!(item: &protowire::GetPouwTaskRequestMessage, karlsen_rpc_core::GetPouw
 });
 
 // Converts protowire GetPouwTaskResponseMessage to core GetPouwTaskResponse
+/*
 try_from!(item: &protowire::GetPouwTaskResponseMessage, RpcResult<karlsen_rpc_core::GetPouwTaskResponse>, {
     Self {
         task_id: item.task_id.clone(),
         subnet: item.subnet.clone(),
         data: item.data.clone(),
-        /*
-        id: item.id.clone(),
-        data: item.data.clone(),
-        found: item.found,
-        */
+    }
+});
+*/
+// Converts protowire GetPouwTaskResponseMessage to core GetPouwTaskResponse
+try_from!(item: &protowire::GetPouwTaskResponseMessage, RpcResult<karlsen_rpc_core::GetPouwTaskResponse>, {
+    let tasks = item.tasks.iter().map(|t| karlsen_rpc_core::RpcPouwTask {
+        id: t.id.clone(),
+        data: t.data.clone(),
+    }).collect();
+
+    Self {
+        tasks
     }
 });
 

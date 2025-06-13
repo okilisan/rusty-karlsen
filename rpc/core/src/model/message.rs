@@ -3583,15 +3583,51 @@ impl Deserializer for GetPouwTaskRequest {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct RpcPouwTask {
+    pub id: String,
+    pub data: String,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetPouwTaskResponse {
+    pub tasks: Vec<RpcPouwTask>,
+}
+
+impl Serializer for GetPouwTaskResponse {
+    fn serialize<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+        store!(u16, &1, writer)?;
+        store!(u32, &(self.tasks.len() as u32), writer)?;
+        for task in &self.tasks {
+            store!(String, &task.id, writer)?;
+            store!(String, &task.data, writer)?;
+        }
+        Ok(())
+    }
+}
+
+impl Deserializer for GetPouwTaskResponse {
+    fn deserialize<R: std::io::Read>(reader: &mut R) -> std::io::Result<Self> {
+        let _version = load!(u16, reader)?;
+        let len = load!(u32, reader)?;
+        let mut tasks = Vec::with_capacity(len as usize);
+        for _ in 0..len {
+            let id = load!(String, reader)?;
+            let data = load!(String, reader)?;
+            tasks.push(RpcPouwTask { id, data });
+        }
+        Ok(Self { tasks })
+    }
+}
+
+
+/*
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GetPouwTaskResponse {
     pub task_id: String,
     pub subnet: String,
     pub data: String,
-    /*
-    pub id: String,
-    pub data: String,
-    pub found: bool,
-    */
 }
 
 impl Serializer for GetPouwTaskResponse {
@@ -3600,11 +3636,6 @@ impl Serializer for GetPouwTaskResponse {
         store!(String, &self.task_id, writer)?;
         store!(String, &self.subnet, writer)?;
         store!(String, &self.data, writer)?;
-        /*
-        store!(String, &self.id, writer)?;
-        store!(String, &self.data, writer)?;
-        store!(bool, &self.found, writer)?;
-        */
         Ok(())
     }
 }
@@ -3615,14 +3646,11 @@ impl Deserializer for GetPouwTaskResponse {
         let task_id = load!(String, reader)?;
         let subnet = load!(String, reader)?;
         let data = load!(String, reader)?;
-        /*
-        let id = load!(String, reader)?;
-        let data = load!(String, reader)?;
-        let found = load!(bool, reader)?;
-        */
         Ok(Self { task_id, subnet, data })
     }
 }
+*/
+
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

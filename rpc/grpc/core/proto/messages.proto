@@ -67,10 +67,11 @@ message KarlsendRequest {
     GetCurrentBlockColorRequestMessage getCurrentBlockColorRequest = 1110;
     GetUtxoReturnAddressRequestMessage GetUtxoReturnAddressRequest = 1112;
 
-    SubmitPouwTaskRequestMessage submitPouwTaskRequest = 1200;
-    GetPouwTaskRequestMessage getPouwTaskRequest = 1202;
-    SubmitPouwResultRequestMessage submitPouwResultRequest = 1204;
-    GetPouwResultRequestMessage getPouwResultRequest = 1206;
+    
+    GetPouwTaskRequestMessage getPouwTaskRequest = 2000;
+    GetPouwResultRequestMessage getPouwResultRequest = 2010;
+    SubmitPouwTaskRequestMessage submitPouwTaskRequest = 2020;
+    SubmitPouwResultRequestMessage submitPouwResultRequest = 2030;
 
   }
 }
@@ -139,10 +140,11 @@ message KarlsendResponse {
     GetCurrentBlockColorResponseMessage getCurrentBlockColorResponse = 1111;
     GetUtxoReturnAddressResponseMessage GetUtxoReturnAddressResponse = 1113;
 
-    SubmitPouwTaskResponseMessage submitPouwTaskResponse = 1201;
-    GetPouwTaskResponseMessage getPouwTaskResponse = 1203;
-    SubmitPouwResultResponseMessage submitPouwResultResponse = 1205;
-    GetPouwResultResponseMessage getPouwResultResponse = 1207;
+    GetPouwTaskResponseMessage getPouwTaskResponse = 2001;
+    GetPouwResultResponseMessage getPouwResultResponse = 2011;
+    SubmitPouwTaskResponseMessage submitPouwTaskResponse = 2021;
+    SubmitPouwResultResponseMessage submitPouwResultResponse = 2031;
+    
 
   }
 }

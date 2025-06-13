@@ -22,6 +22,7 @@ use karlsen_consensus_notify::{
     {connection::ConsensusChannelConnection, notification::Notification as ConsensusNotification},
 };
 use karlsen_consensusmanager::ConsensusManager;
+use karlsen_core::info;
 use karlsen_core::time::unix_now;
 use karlsen_core::{
     core::Core,
@@ -1290,6 +1291,7 @@ impl RpcApi for RpcCoreService {
 
     /// Called by a miner to fetch the next available Pouw task for a specific subnet.
     /// Returns task ID and payload if found, or a 'found = false' flag otherwise.
+/*
     async fn get_pouw_task_call(
         &self,
         _connection: Option<&DynRpcConnection>,
@@ -1297,14 +1299,40 @@ impl RpcApi for RpcCoreService {
     ) -> RpcResult<GetPouwTaskResponse> {
         let manager = self.pouw_manager.clone();
         if let Some(ref pow_task) = manager.get_task(request.subnet).await {
+            info!("Found Pouw task, sending response");
             let task_id = pow_task.id.clone();
             let subnet = pow_task.subnet.clone();
             let data = pow_task.encrypted_response.clone().unwrap_or_default();
             Ok(GetPouwTaskResponse { task_id, subnet, data })
         } else {
+            info!("No Pouw task found - no response");
             Ok(GetPouwTaskResponse { task_id: "".to_string(), subnet: "".to_string(), data: "".to_string() })
         }
     }
+*/
+    /// Called by a miner to fetch the next available Pouw task for a specific subnet.
+    /// Returns list of tasks (may be empty).
+    async fn get_pouw_task_call(
+        &self,
+        _connection: Option<&DynRpcConnection>,
+        request: GetPouwTaskRequest,
+    ) -> RpcResult<GetPouwTaskResponse> {
+        let manager = self.pouw_manager.clone();
+        let mut tasks = Vec::new();
+
+        if let Some(pow_task) = manager.get_task(request.subnet).await {
+            info!("[PoUW] Found task: id={}, subnet={}", pow_task.id, pow_task.subnet);
+            tasks.push(RpcPouwTask {
+                id: pow_task.id.clone(),
+                data: pow_task.encrypted_request.clone(),
+            });
+        } else {
+            info!("[PoUW] No available task for subnet");
+        }
+
+        Ok(GetPouwTaskResponse { tasks })
+    }
+
 
     /// Called by a miner to submit a completed result for a specific task.
     /// Returns whether the result was accepted (valid and not already submitted).
@@ -1325,6 +1353,7 @@ impl RpcApi for RpcCoreService {
         _connection: Option<&DynRpcConnection>,
         request: GetPouwResultRequest,
     ) -> RpcResult<GetPouwResultResponse> {
+        info!("async fn get_pouw_result_call");
         let manager = self.pouw_manager.clone();
         if let Some(data) = manager.get_result(request.task_id).await {
             Ok(GetPouwResultResponse { data, found: true })

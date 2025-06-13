@@ -10,6 +10,7 @@ use crate::api::connection::DynRpcConnection;
 use crate::{model::*, notify::connection::ChannelConnection, RpcResult};
 use async_trait::async_trait;
 use downcast::{downcast_sync, AnySync};
+use karlsen_core::info;
 use karlsen_notify::{listener::ListenerId, scope::Scope, subscription::Command};
 use std::sync::Arc;
 
@@ -548,6 +549,7 @@ pub trait RpcApi: Sync + Send + AnySync {
 
     /// Retrieves the result of a given Pouw task (called by the original client who submitted the task).
     async fn get_pouw_result(&self, task_id: String) -> RpcResult<GetPouwResultResponse> {
+        info!("get_pouw_result(&self, task_id: String)");
         self.get_pouw_result_call(None, GetPouwResultRequest { task_id }).await
     }
 

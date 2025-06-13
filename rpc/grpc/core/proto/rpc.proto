@@ -1001,12 +1001,25 @@ message GetPouwTaskRequestMessage {
   string subnet = 1;
 }
 
+/*
 message GetPouwTaskResponseMessage {
   string task_id = 1;
   string subnet = 2;
   string data = 3;
   RPCError error = 1000;
 }
+*/
+
+message GetPouwTaskResponseMessage {
+  repeated RpcPouwTask tasks = 1;
+  RPCError error = 1000;
+}
+
+message RpcPouwTask {
+  string id = 1;
+  string data = 2;
+}
+
 
 // Miner submits the result of a Pouw task.
 message SubmitPouwResultRequestMessage {
