@@ -57,12 +57,19 @@ impl PouwManager {
         let guard = self.inner.lock().await;
         info!("[PoUW] Get Task for {} — Current task list:", subnet);
         for task in guard.values() {
-            info!("→ Task id={}, subnet={}, encrypted_request={:?}, encrypted_response={:?}", task.id, task.subnet, task.encrypted_request, task.encrypted_response);
+            info!(
+                "→ Task id={}, subnet={}, encrypted_request={:?}, encrypted_response={:?}",
+                task.id, task.subnet, task.encrypted_request, task.encrypted_response
+            );
+        }
+        info!("task filtered");
+        let clean_subnet = subnet.trim_matches('"');
+        for task in guard.values().find(|t| t.subnet.trim_matches('"') == clean_subnet && t.encrypted_response.is_none()).cloned() {
+            info!("Task id={}", task.id);
         }
 
-        guard.values()
-            .find(|t| t.subnet == subnet && t.encrypted_response.is_none())
-            .cloned()
+        //guard.values().find(|t| t.subnet == subnet && t.encrypted_response.is_none()).cloned()
+        guard.values().find(|t| t.subnet.trim_matches('"') == clean_subnet && t.encrypted_response.is_none()).cloned()
     }
 
     /// Submits the result of a task by a miner.

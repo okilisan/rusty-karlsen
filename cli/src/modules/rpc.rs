@@ -323,7 +323,6 @@ impl Rpc {
                 self.println(&ctx, result);
             }
 
-
             _ => {
                 tprintln!(ctx, "rpc method exists but is not supported by the cli: '{op_str}'\r\n");
                 return Ok(());

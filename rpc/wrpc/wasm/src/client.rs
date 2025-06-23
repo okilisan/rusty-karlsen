@@ -1055,7 +1055,6 @@ build_wrpc_wasm_bindgen_interface!(
         /// to the Karlsen node again.
         /// Returned information: None.
         Unban,
-        
         /// Submits a Proof-of-Useful-Work task.
         /// Returned information: Task ID.
         SubmitPouwTask,

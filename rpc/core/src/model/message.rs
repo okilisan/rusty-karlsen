@@ -3620,7 +3620,6 @@ impl Deserializer for GetPouwTaskResponse {
     }
 }
 
-
 /*
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -3650,7 +3649,6 @@ impl Deserializer for GetPouwTaskResponse {
     }
 }
 */
-
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
